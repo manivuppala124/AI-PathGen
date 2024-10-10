@@ -1,68 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import jsMind from 'jsmind';
 import 'jsmind/style/jsmind.css'; // Import jsMind CSS
 
-const COHERE_API_KEY = '4DXFsPiFWGRBusJhGMRWSw6VO848SKbliQ09CCz0';
-const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
-
-const MindMap = () => {
-  const [inputText, setInputText] = useState('');
-  const [courseLevel, setCourseLevel] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+const MindMap = ({ inputText }) => {
   const [mindMapData, setMindMapData] = useState(null);
 
-  const handleModelResponse = async () => {
-    if (!inputText || !courseLevel) return;
-
-    try {
-      setIsTyping(true);
-
-      const promptPreamble = `
-      You are a highly knowledgeable AI that assists students in learning various subjects by creating personalized learning paths based on their existing knowledge, goals, and preferences. 
-      The learning path should be structured in a step-by-step manner, starting from the basics and gradually advancing toward more complex concepts. 
-      For each topic, include recommended learning resources such as articles, tutorials, and videos. 
-      Consider the learner's pace, preferred learning style (e.g., visual, auditory, or hands-on), and any specific goals they have mentioned.
-
-      Please generate a learning path for the following course:
-
-      Course: ${inputText}
-      Current Knowledge Level: ${courseLevel}
-      Goal: become proficient in ${inputText}
-      Learning Style Preference: [Insert learning style preference if applicable, e.g., hands-on practice, theory-based, etc.]
-
-      Ensure the path is logical and builds upon the learner's existing knowledge.
-      `;
-
-      const response = await fetch(COHERE_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${COHERE_API_KEY}`,
-        },
-        body: JSON.stringify({
-          prompt: promptPreamble,
-          max_tokens: 500,
-          temperature: 0.7,
-          stop_sequences: [],
-          return_likelihoods: 'NONE',
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      let botText = '';
-
-      if (Array.isArray(data.generations)) {
-        botText = data.generations.map((generation) => generation.text).join('\n');
-      } else {
-        botText = data.response || 'Error fetching data. Please try again later.';
-      }
-
-      // Parse the botText to mind map
-      const parsedData = parseTextToMindMap(botText.trim());
+  useEffect(() => {
+    if (inputText) {
+      const parsedData = parseTextToMindMap(inputText.trim());
       const mindMapFormat = {
         meta: {
           name: 'Learning Path Mind Map',
@@ -72,18 +17,13 @@ const MindMap = () => {
         format: 'node_tree',
         data: parsedData,
       };
-
       setMindMapData(mindMapFormat);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsTyping(false);
     }
-  };
+  }, [inputText]);
 
   // Function to parse the Cohere-generated text into mind map data format
   const parseTextToMindMap = (text) => {
-    const topics = text.trim().split(',');
+    const topics = text.split(','); // Adjust this split logic based on your expected input
     const root = {
       id: 'root',
       isroot: true,
@@ -123,27 +63,10 @@ const MindMap = () => {
 
   return (
     <div>
-      <h1>Mind Map</h1>
-      <div>
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder="Enter the course name"
-        />
-        <input
-          type="text"
-          value={courseLevel}
-          onChange={(e) => setCourseLevel(e.target.value)}
-          placeholder="Enter your knowledge level (e.g., beginner, intermediate, advanced)"
-        />
-        <button onClick={handleModelResponse}>
-          {isTyping ? 'Generating...' : 'Generate Learning Path'}
-        </button>
-      </div>
+      <h2>Mind Map</h2>
       <div
         id="jsmind_container"
-        style={{ width: '100vw', height: '500vh', border: '1px solid #ccc' }}
+        style={{ width: '100%', height: '500px', border: '1px solid #ccc' }}
       ></div>
     </div>
   );

@@ -5,24 +5,25 @@ const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
 
 function TestScreen({ onTextGenerated }) {
   const [inputText, setInputText] = useState('');
+  const [courseLevel, setCourseLevel] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleModelResponse = async (messageText) => {
+  const handleModelResponse = async () => {
     try {
       setIsTyping(true);
 
       // Set the preamble for the learning path generation
       const promptPreamble = `
-      You are a highly knowledgeable AI that assists students in learning various subjects by creating personalized learning paths based on their existing knowledge, goals, and preferences. The learning path should be structured in a step-by-step manner, starting from the basics and gradually advancing toward more complex concepts. For each topic, include recommended learning resources such as articles, tutorials, and videos. Consider the learner's pace, preferred learning style (e.g., visual, auditory, or hands-on), and any specific goals they have mentioned (e.g., becoming proficient in a particular programming language or mastering a specific framework).
+        You are a highly knowledgeable AI that assists students in learning various subjects by creating personalized learning paths based on their existing knowledge, goals, and preferences. 
+        The learning path should be structured in a step-by-step manner, starting from the basics and gradually advancing toward more complex concepts. 
+        For each topic, include recommended learning resources such as articles, tutorials, and videos. 
+        Consider the learner's pace, preferred learning style (e.g., visual, auditory, or hands-on), and any specific goals they have mentioned.
 
-Please generate a learning path for the following course:
+        Please generate a learning path for the following course:
 
-Course: [Insert course name or topic] Current Knowledge Level: [Insert student's knowledge level, e.g., beginner, intermediate, or advanced] Goal: [Insert the student's goal, e.g., become proficient in front-end development] Learning Style Preference: [Insert learning style preference if applicable, e.g., hands-on practice, theory-based, etc.]
-
- Ensure the path is logical and builds upon the learner's existing knowledge.
-dont give me any explanation or source justr give me module names connected by a node 
-dont give me subtopics  , just mention the topics thats it ,
-now just dont mention steps , seperate them by commas
+        Course: ${inputText}
+        Current Knowledge Level: ${courseLevel}
+        Goal: become proficient in ${inputText}
       `;
 
       const response = await fetch(COHERE_API_URL, {
@@ -48,7 +49,7 @@ now just dont mention steps , seperate them by commas
       let botText = '';
 
       if (Array.isArray(data.generations)) {
-        botText = data.generations.map(generation => generation.text).join('\n');
+        botText = data.generations.map((generation) => generation.text).join('\n');
       } else {
         botText = data.response || 'Error fetching data. Please try again later.';
       }
@@ -65,7 +66,7 @@ now just dont mention steps , seperate them by commas
   const handleSubmit = () => {
     if (!inputText.trim()) return;
 
-    handleModelResponse(inputText);
+    handleModelResponse();
     setInputText('');  // Clear the input after submitting
   };
 
@@ -75,12 +76,13 @@ now just dont mention steps , seperate them by commas
         type="text"
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleSubmit();
-          }
-        }}
-        placeholder="Enter a course or topic to generate a learning path..."
+        placeholder="Enter a course or topic..."
+      />
+      <input
+        type="text"
+        value={courseLevel}
+        onChange={(e) => setCourseLevel(e.target.value)}
+        placeholder="Your knowledge level (e.g., beginner, intermediate)"
       />
       <button onClick={handleSubmit}>Generate Learning Path</button>
       {isTyping && <p>Generating...</p>}
