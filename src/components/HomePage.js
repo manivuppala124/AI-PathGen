@@ -1,74 +1,58 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './HomePage.css';
 
 const HomePage = () => {
-  const [courseName, setCourseName] = useState('');
-  const [category, setCategory] = useState(''); // State for category selection
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+
+  const categories = [
+    { name: 'Full Stack Web Development', courses: ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js'] },
+    { name: 'Data Science', courses: ['Python', 'Pandas', 'Machine Learning', 'Deep Learning'] },
+    { name: 'Programming Languages', courses: ['Java', 'Python', 'C++', 'Go'] },
+    { name: 'Databases', courses: ['MySQL', 'MongoDB', 'PostgreSQL'] },
+    // Add more categories as needed
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (courseName) {
-      navigate(`/learn/${courseName}`);
+    if (searchTerm) {
+      navigate(`/quiz/${searchTerm}`); // Change URL to /quiz/courseName
     }
   };
 
-  const handleCategoryClick = (course) => {
-    setCourseName(course);
-    navigate(`/learn/${course}`);
+  const handleCourseClick = (course) => {
+    navigate(`/quiz/${course}`); // Change URL to /quiz/courseName
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center">Learning Path Generator</h1>
-      <form onSubmit={handleSubmit} className="text-center">
+    <div className="container">
+      <h1>Search for a Course</h1>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          className="form-control"
-          placeholder="Enter Course Name"
-          value={courseName}
-          onChange={(e) => setCourseName(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Enter course name"
+          required
+          style={{ width: '100%', padding: '10px', fontSize: '1.2em' }} // Make the search input larger
         />
-        <button type="submit" className="btn btn-primary mt-3">
-          Submit
-        </button>
+        <button type="submit">Search</button>
       </form>
 
-      <div className="categories mt-5">
-        <h2>Course Categories</h2>
-        <div className="d-flex flex-wrap justify-content-center">
-          <div className="card m-2" onClick={() => handleCategoryClick('Web Development')}>
-            <div className="card-body">
-              <h5 className="card-title">Web Development</h5>
-            </div>
-          </div>
-          <div className="card m-2" onClick={() => handleCategoryClick('Data Science')}>
-            <div className="card-body">
-              <h5 className="card-title">Data Science</h5>
-            </div>
-          </div>
-          <div className="card m-2" onClick={() => handleCategoryClick('Machine Learning')}>
-            <div className="card-body">
-              <h5 className="card-title">Machine Learning</h5>
-            </div>
-          </div>
-          <div className="card m-2" onClick={() => handleCategoryClick('Mobile App Development')}>
-            <div className="card-body">
-              <h5 className="card-title">Mobile App Development</h5>
-            </div>
-          </div>
-          <div className="card m-2" onClick={() => handleCategoryClick('Cybersecurity')}>
-            <div className="card-body">
-              <h5 className="card-title">Cybersecurity</h5>
-            </div>
-          </div>
-          <div className="card m-2" onClick={() => handleCategoryClick('Game Development')}>
-            <div className="card-body">
-              <h5 className="card-title">Game Development</h5>
-            </div>
-          </div>
+      <h2 style={{ backgroundColor: '#f8f9fa', padding: '10px', marginTop: '20px' }}>Categories</h2>
+      {categories.map((category) => (
+        <div key={category.name}>
+          <h3>{category.name}</h3>
+          <ul>
+            {category.courses.map((course) => (
+              <li key={course} onClick={() => handleCourseClick(course)}>
+                {course}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      ))}
     </div>
   );
 };

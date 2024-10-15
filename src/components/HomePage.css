@@ -1,14 +1,103 @@
-.hero-section {
-    height: 70vh;
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .card {
-    transition: transform 0.3s;
-  }
-  
-  .card:hover {
-    transform: scale(1.05);
-  }
-  
+/* SearchPage.css */
+.category-card {
+  transition: background-color 0.3s;
+}
+
+.category-card:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.category-card h3 {
+  margin-bottom: 15px; /* Space between title and courses */
+}
+.category-card {
+  transition: background-color 0.3s;
+}
+
+.category-card:hover {
+  opacity: 0.8; /* Slightly transparent on hover */
+}
+
+.category-card h3 {
+  margin-bottom: 15px; /* Space between title and courses */
+}
+body {
+  background-color: #f0f2f5; /* Light background for the whole page */
+}
+
+.category-card {
+  transition: transform 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.category-card:hover {
+  transform: scale(1.05); /* Slightly enlarge the card on hover */
+}
+
+.category-card h3 {
+  margin-bottom: 15px; /* Space between title and courses */
+}
+
+.container {
+  max-width: 800px; /* Maximum width of the container */
+  margin: 0 auto; /* Center the container */
+  padding: 20px; /* Padding around the content */
+  background-color: #f8f9fa; /* Light gray background */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+h1 {
+  text-align: center; /* Center the title */
+  margin-bottom: 20px; /* Space below the title */
+}
+
+form {
+  display: flex; /* Flex layout for the form */
+  justify-content: center; /* Center the form elements */
+  margin-bottom: 30px; /* Space below the form */
+}
+
+input {
+  padding: 10px; /* Padding inside the input */
+  border: 1px solid #ced4da; /* Light gray border */
+  border-radius: 4px; /* Rounded corners */
+  margin-right: 10px; /* Space between input and button */
+  flex: 1; /* Take full width of the container */
+}
+
+button {
+  padding: 10px 20px; /* Padding inside the button */
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white; /* White text */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s; /* Transition effect */
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+h2 {
+  margin-top: 30px; /* Space above the category title */
+}
+
+h3 {
+  margin-top: 20px; /* Space above each category */
+}
+
+ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+}
+
+li {
+  padding: 5px; /* Padding for each course item */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+li:hover {
+  background-color: #e9ecef; /* Light background on hover */
+}
