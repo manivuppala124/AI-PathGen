@@ -1,7 +1,8 @@
+// TestScreen.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './TestScreen.css'; // Separate CSS file for custom styles
+import './TestScreen.css';
 
 const COHERE_API_KEY = '4DXFsPiFWGRBusJhGMRWSw6VO848SKbliQ09CCz0';
 const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
@@ -39,10 +40,8 @@ function TestScreen() {
         },
         body: JSON.stringify({
           prompt: prompt,
-          max_tokens: 800, // Increased token limit
+          max_tokens: 800,
           temperature: 0.7,
-          stop_sequences: [],
-          return_likelihoods: 'NONE',
         }),
       });
 
@@ -53,10 +52,7 @@ function TestScreen() {
       const data = await response.json();
       const generatedText = data.generations[0]?.text.trim();
 
-      // Log the generated text for debugging
-      console.log('Generated Quiz Text:', generatedText);
-
-      const parsedQuiz = parseQuiz(generatedText); // Parse the text into JSON format
+      const parsedQuiz = parseQuiz(generatedText);
       setQuiz(parsedQuiz);
 
     } catch (error) {
@@ -73,41 +69,31 @@ function TestScreen() {
 
     lines.forEach((line) => {
       line = line.trim();
-      // Check for a new question without the prefix
       if (line.match(/^[0-9]+\. /)) {
-        if (currentQuestion) {
-          questions.push(currentQuestion);
-        }
+        if (currentQuestion) questions.push(currentQuestion);
         currentQuestion = {
-          question: line.replace(/^[0-9]+\. /, ''), // Remove the number prefix
+          question: line.replace(/^[0-9]+\. /, ''),
           options: [],
           correctAnswers: [],
           isMultipleChoice: false,
         };
       } else if (line.match(/^[a-d]\)/)) {
-        currentQuestion.options.push(line.trim()); // Add options
+        currentQuestion.options.push(line.trim());
       } else if (line.startsWith('Answer:')) {
         const answers = line.split(':')[1].trim().split(',').map(answer => answer.trim());
-        currentQuestion.correctAnswers = answers; // Set correct answers
+        currentQuestion.correctAnswers = answers;
       } else if (line.startsWith('Multiple choice:')) {
-        currentQuestion.isMultipleChoice = line.split(':')[1].trim().toLowerCase() === 'true'; // Set multiple choice flag
+        currentQuestion.isMultipleChoice = line.split(':')[1].trim().toLowerCase() === 'true';
       }
     });
 
-    if (currentQuestion) {
-      questions.push(currentQuestion); // Add the last question
-    }
-
-    // Log parsed questions for debugging
-    console.log('Parsed Questions:', questions);
-
-    return questions; // Return the structured quiz
+    if (currentQuestion) questions.push(currentQuestion);
+    return questions;
   };
 
   const handleAnswerChange = (questionIndex, selectedOption) => {
     setUserAnswers((prevAnswers) => {
       if (quiz[questionIndex].isMultipleChoice) {
-        // For multiple choice, add or remove selected option
         const selectedAnswers = prevAnswers[questionIndex] || [];
         if (selectedAnswers.includes(selectedOption)) {
           return { ...prevAnswers, [questionIndex]: selectedAnswers.filter(ans => ans !== selectedOption) };
@@ -115,7 +101,6 @@ function TestScreen() {
           return { ...prevAnswers, [questionIndex]: [...selectedAnswers, selectedOption] };
         }
       } else {
-        // For single choice, just set the selected option
         return { ...prevAnswers, [questionIndex]: selectedOption };
       }
     });
@@ -125,15 +110,15 @@ function TestScreen() {
     let calculatedScore = 0;
 
     quiz.forEach((q, index) => {
-      const userAnswersForQuestion = userAnswers[index] || [];
+      const userAnswersForQuestion = Array.isArray(userAnswers[index]) ? userAnswers[index] : [userAnswers[index]];
       const correctAnswers = q.correctAnswers;
 
-      // Check if user's answers match the correct answers
       const isCorrect = correctAnswers.every(answer => userAnswersForQuestion.includes(answer));
-      if (isCorrect) {
-        calculatedScore++; // Increment score for each correct answer
+      const hasAllCorrectAnswers = userAnswersForQuestion.every(answer => correctAnswers.includes(answer));
+
+      if (isCorrect && hasAllCorrectAnswers) {
+        calculatedScore++;
       }
-      // No need to penalize for incorrect answers, so do nothing here
     });
 
     setScore(calculatedScore);
@@ -145,12 +130,11 @@ function TestScreen() {
     }
   }, [courseName]);
 
-  // Function to detect and wrap code in <code> blocks
   const renderWithCodeBlocks = (text) => {
     const codePattern = /```([^`]+)```/g;
     const parts = text.split(codePattern);
 
-    return parts.map((part, index) => 
+    return parts.map((part, index) =>
       index % 2 === 1 ? <code key={index} className="bg-light px-2 py-1">{part}</code> : part
     );
   };
@@ -168,7 +152,7 @@ function TestScreen() {
             quiz.map((q, index) => (
               <div key={index} className="quiz-question mb-5 p-3 border rounded">
                 <h5 className="question-title">
-                  {renderWithCodeBlocks(q.question)} {/* Render question with code blocks */}
+                  {renderWithCodeBlocks(q.question)}
                 </h5>
                 <div className="options-list">
                   {q.options.map((option, optIndex) => (
@@ -185,18 +169,15 @@ function TestScreen() {
                         <input
                           className="form-check-input"
                           type="radio"
-                          name={`question-${index}`} // Ensure the name is unique per question
+                          name={`question-${index}`}
                           id={`question-${index}-option-${optIndex}`}
-                          value={option.charAt(0)} // Set the value to the option's character
+                          value={option.charAt(0)}
                           onChange={() => handleAnswerChange(index, option.charAt(0))}
-                          checked={userAnswers[index] === option.charAt(0)} // Ensure checked state is managed
+                          checked={userAnswers[index] === option.charAt(0)}
                         />
                       )}
-                      <label
-                        className="form-check-label"
-                        htmlFor={`question-${index}-option-${optIndex}`}
-                      >
-                        {renderWithCodeBlocks(option)} {/* Render options with code blocks */}
+                      <label className="form-check-label" htmlFor={`question-${index}-option-${optIndex}`}>
+                        {renderWithCodeBlocks(option)}
                       </label>
                     </div>
                   ))}

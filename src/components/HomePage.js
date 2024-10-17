@@ -1,3 +1,4 @@
+// HomePage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
@@ -11,18 +12,17 @@ const HomePage = () => {
     { name: 'Data Science', courses: ['Python', 'Pandas', 'Machine Learning', 'Deep Learning'] },
     { name: 'Programming Languages', courses: ['Java', 'Python', 'C++', 'Go'] },
     { name: 'Databases', courses: ['MySQL', 'MongoDB', 'PostgreSQL'] },
-    // Add more categories as needed
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchTerm) {
-      navigate(`/quiz/${searchTerm}`); // Change URL to /quiz/courseName
+      navigate(`/quiz/${searchTerm}`);
     }
   };
 
   const handleCourseClick = (course) => {
-    navigate(`/quiz/${course}`); // Change URL to /quiz/courseName
+    navigate(`/quiz/${course}`);
   };
 
   return (
@@ -35,7 +35,7 @@ const HomePage = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Enter course name"
           required
-          style={{ width: '100%', padding: '10px', fontSize: '1.2em' }} // Make the search input larger
+          style={{ width: '100%', padding: '10px', fontSize: '1.2em' }}
         />
         <button type="submit">Search</button>
       </form>
