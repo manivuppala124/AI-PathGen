@@ -1,6 +1,6 @@
-// HomePage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -26,27 +26,35 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Search for a Course</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter course name"
-          required
-          style={{ width: '100%', padding: '10px', fontSize: '1.2em' }}
-        />
-        <button type="submit">Search</button>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Search for a Course</h1>
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="input-group">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Enter course name (e.g., JavaScript)"
+            required
+            className="form-control"
+            style={{ fontSize: '1.2em' }}
+          />
+          <button type="submit" className="btn btn-primary ml-2">Search</button>
+        </div>
       </form>
 
-      <h2 style={{ backgroundColor: '#f8f9fa', padding: '10px', marginTop: '20px' }}>Categories</h2>
+      <h2 className="text-center mb-3" style={{ backgroundColor: '#f8f9fa', padding: '10px' }}>Categories</h2>
       {categories.map((category) => (
-        <div key={category.name}>
-          <h3>{category.name}</h3>
-          <ul>
+        <div key={category.name} className="mb-4">
+          <h3 className="text-center">{category.name}</h3>
+          <ul className="list-group">
             {category.courses.map((course) => (
-              <li key={course} onClick={() => handleCourseClick(course)}>
+              <li
+                key={course}
+                className="list-group-item list-group-item-action text-center"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleCourseClick(course)}
+              >
                 {course}
               </li>
             ))}

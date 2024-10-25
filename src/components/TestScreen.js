@@ -1,6 +1,5 @@
-// TestScreen.js
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './TestScreen.css';
 
@@ -9,6 +8,7 @@ const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
 
 function TestScreen() {
   const { courseName } = useParams();
+  const navigate = useNavigate();
   const [quiz, setQuiz] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userAnswers, setUserAnswers] = useState({});
@@ -55,6 +55,8 @@ function TestScreen() {
       const parsedQuiz = parseQuiz(generatedText);
       setQuiz(parsedQuiz);
 
+      console.log('Parsed Quiz:', parsedQuiz);
+
     } catch (error) {
       console.error('Error fetching quiz:', error);
     } finally {
@@ -93,16 +95,22 @@ function TestScreen() {
 
   const handleAnswerChange = (questionIndex, selectedOption) => {
     setUserAnswers((prevAnswers) => {
+      let updatedAnswers;
+
       if (quiz[questionIndex].isMultipleChoice) {
         const selectedAnswers = prevAnswers[questionIndex] || [];
         if (selectedAnswers.includes(selectedOption)) {
-          return { ...prevAnswers, [questionIndex]: selectedAnswers.filter(ans => ans !== selectedOption) };
+          updatedAnswers = { ...prevAnswers, [questionIndex]: selectedAnswers.filter(ans => ans !== selectedOption) };
         } else {
-          return { ...prevAnswers, [questionIndex]: [...selectedAnswers, selectedOption] };
+          updatedAnswers = { ...prevAnswers, [questionIndex]: [...selectedAnswers, selectedOption] };
         }
       } else {
-        return { ...prevAnswers, [questionIndex]: selectedOption };
+        updatedAnswers = { ...prevAnswers, [questionIndex]: selectedOption };
       }
+
+      console.log('User Answers:', updatedAnswers);
+
+      return updatedAnswers;
     });
   };
 
@@ -119,9 +127,25 @@ function TestScreen() {
       if (isCorrect && hasAllCorrectAnswers) {
         calculatedScore++;
       }
+
+      console.log(`Question ${index + 1}:`);
+      console.log('User answers:', userAnswersForQuestion);
+      console.log('Correct answers:', correctAnswers);
+      console.log('Is correct:', isCorrect && hasAllCorrectAnswers);
     });
 
     setScore(calculatedScore);
+
+    let level = '';
+    if (calculatedScore <= 4) {
+      level = 'beginner';
+    } else if (calculatedScore <= 7) {
+      level = 'intermediate';
+    } else {
+      level = 'advanced';
+    }
+
+    navigate(`/path/${courseName}/${level}`);
   };
 
   useEffect(() => {
@@ -155,32 +179,38 @@ function TestScreen() {
                   {renderWithCodeBlocks(q.question)}
                 </h5>
                 <div className="options-list">
-                  {q.options.map((option, optIndex) => (
-                    <div key={optIndex} className="form-check option-item mb-2">
-                      {q.isMultipleChoice ? (
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id={`question-${index}-option-${optIndex}`}
-                          onChange={() => handleAnswerChange(index, option.charAt(0))}
-                          checked={userAnswers[index]?.includes(option.charAt(0)) || false}
-                        />
-                      ) : (
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name={`question-${index}`}
-                          id={`question-${index}-option-${optIndex}`}
-                          value={option.charAt(0)}
-                          onChange={() => handleAnswerChange(index, option.charAt(0))}
-                          checked={userAnswers[index] === option.charAt(0)}
-                        />
-                      )}
-                      <label className="form-check-label" htmlFor={`question-${index}-option-${optIndex}`}>
-                        {renderWithCodeBlocks(option)}
-                      </label>
-                    </div>
-                  ))}
+                  {q.options.map((option, optIndex) => {
+                    // Check if option is defined before rendering
+                    const optionValue = option || ''; // Default to empty string if option is undefined
+                    const optionId = `question-${index}-option-${optIndex}`;
+                    
+                    return (
+                      <div key={optIndex} className="form-check option-item mb-2">
+                        {q.isMultipleChoice ? (
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id={optionId}
+                            onChange={() => handleAnswerChange(index, optionValue.charAt(0))}
+                            checked={userAnswers[index]?.includes(optionValue.charAt(0)) || false}
+                          />
+                        ) : (
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name={`question-${index}`}
+                            id={optionId}
+                            value={optionValue.charAt(0)}
+                            onChange={() => handleAnswerChange(index, optionValue.charAt(0))}
+                            checked={userAnswers[index] === optionValue.charAt(0)}
+                          />
+                        )}
+                        <label className="form-check-label" htmlFor={optionId}>
+                          {renderWithCodeBlocks(optionValue)}
+                        </label>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))
