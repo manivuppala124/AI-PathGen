@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Quiz.css';
 
-const COHERE_API_KEY = '4DXFsPiFWGRBusJhGMRWSw6VO848SKbliQ09CCz0';
+const COHERE_API_KEY = "4DXFsPiFWGRBusJhGMRWSw6VO848SKbliQ09CCz0";
 const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
 
 function Quiz() {
@@ -23,26 +23,9 @@ function Quiz() {
         You are an AI designed to generate a performance-evaluating multiple-choice quiz.
         Create a quiz with 10 questions for the course: ${courseName}.
         Each question should assess key concepts from the course and increase in difficulty as the quiz progresses.
-        The goal of the quiz is to evaluate the user's understanding of fundamental to advanced concepts in ${courseName}.
-
         Each question should have four options, and only one correct answer.
 
-        Return the quiz in the following structured JSON format:
-        [
-            {
-                "question": "Your question here",
-                "answers": [
-                    { "text": "Option 1", "correct": false },
-                    { "text": "Option 2", "correct": true },
-                    { "text": "Option 3", "correct": false },
-                    { "text": "Option 4", "correct": false }
-                ]
-            }
-        ]
-
-        Ensure the questions are varied in complexity, with the last few questions being more difficult and evaluating deeper understanding of ${courseName} concepts.
-
-        Include questions that evaluate practical application, theoretical understanding, and problem-solving skills in ${courseName}.
+        Return the quiz in a structured JSON format, where each question is an object with "question" and "answers" (an array of options, each with text and correct flag).
       `;
 
       const response = await fetch(COHERE_API_URL, {
@@ -53,7 +36,7 @@ function Quiz() {
         },
         body: JSON.stringify({
           prompt: prompt,
-          max_tokens: 1500,
+          max_tokens: 2500,
           temperature: 0.7,
         }),
       });
@@ -75,7 +58,7 @@ function Quiz() {
     } catch (error) {
       console.error('Error fetching quiz:', error);
       setQuiz([]);
-      setError('Failed to fetch quiz data.');
+      setError('Failed to fetch quiz data. Please try again later.');
     } finally {
       setIsLoading(false);
     }
@@ -83,20 +66,28 @@ function Quiz() {
 
   const safeParseQuiz = (text) => {
     try {
+      // Find the start and end of the JSON array
       const jsonStart = text.indexOf('[');
       const jsonEnd = text.lastIndexOf(']') + 1;
-
+  
       if (jsonStart === -1 || jsonEnd === -1) {
         throw new Error('No JSON structure found.');
       }
-
-      const jsonString = text.slice(jsonStart, jsonEnd);
+  
+      // Extract and clean up the JSON content between the brackets
+      let jsonString = text.slice(jsonStart, jsonEnd)
+        .replace(/(\w+):/g, '"$1":')  // Add quotes around property names
+        .replace(/,\s*}/g, '}')       // Remove trailing commas before closing braces
+        .replace(/,\s*]/g, ']');       // Remove trailing commas before closing brackets
+  
+      // Parse the cleaned JSON string
       const parsedQuestions = JSON.parse(jsonString);
-
+  
       if (!Array.isArray(parsedQuestions)) {
         throw new Error('Parsed quiz is not an array.');
       }
-
+  
+      // Map parsed questions to structured format
       return parsedQuestions.map((question) => ({
         question: question.question,
         options: question.answers.map(answer => ({
@@ -104,11 +95,14 @@ function Quiz() {
           correct: answer.correct
         }))
       }));
+  
     } catch (error) {
       console.error('Error parsing quiz:', error);
+      console.error('Original text:', text); // Optional: Log full response to troubleshoot
       return [];
     }
   };
+  
 
   const handleAnswerChange = (selectedOption) => {
     setUserAnswers((prevAnswers) => ({
@@ -123,6 +117,13 @@ function Quiz() {
     } else {
       setError(null);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setError(null);
     }
   };
 
@@ -154,6 +155,12 @@ function Quiz() {
     }
   };
 
+  const handleReattempt = () => {
+    setUserAnswers({});
+    setScore(null);
+    setCurrentQuestionIndex(0);
+  };
+
   useEffect(() => {
     if (courseName) {
       fetchQuiz();
@@ -172,7 +179,8 @@ function Quiz() {
           {error && <p className="error text-center text-danger">{error}</p>}
           {quiz.length > 0 && currentQuestionIndex < quiz.length ? (
             <div className="quiz-question mb-5 p-3 border rounded">
-              <h5 className="question-title">{quiz[currentQuestionIndex].question}</h5>
+              <h5 className="question-title">Question {currentQuestionIndex + 1} of {quiz.length}</h5>
+              <h6>{quiz[currentQuestionIndex].question}</h6>
               <div className="options-list">
                 {quiz[currentQuestionIndex].options.map((option, optIndex) => (
                   <div key={optIndex} className="form-check option-item mb-2">
@@ -197,12 +205,17 @@ function Quiz() {
           )}
 
           <div className="text-center">
+            {currentQuestionIndex > 0 && (
+              <button className="btn btn-secondary me-2" onClick={handleBack}>
+                Back
+              </button>
+            )}
             {currentQuestionIndex < quiz.length - 1 ? (
-              <button className="btn btn-primary mt-4" onClick={handleNext}>
+              <button className="btn btn-primary" onClick={handleNext}>
                 Next
               </button>
             ) : (
-              <button className="btn btn-success mt-4" onClick={handleSubmit}>
+              <button className="btn btn-success" onClick={handleSubmit}>
                 Submit
               </button>
             )}
@@ -210,6 +223,11 @@ function Quiz() {
           {score !== null && (
             <div className="alert alert-info text-center mt-4">
               Your score: {score} / {quiz.length}
+              <div className="mt-3">
+                <button className="btn btn-warning" onClick={handleReattempt}>
+                  Reattempt Quiz
+                </button>
+              </div>
             </div>
           )}
         </>

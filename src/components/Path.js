@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const COHERE_API_KEY = '4DXFsPiFWGRBusJhGMRWSw6VO848SKbliQ09CCz0';
 const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
 
-function Path({ courseName, level }) {
+function Path() {
+  const { courseName, level } = useParams();
+  const location = useLocation();
   const [learningPath, setLearningPath] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [score, setScore] = useState(null);
 
   useEffect(() => {
+    // Retrieve the score passed from the Quiz page if available
+    const queryParams = new URLSearchParams(location.search);
+    const retrievedScore = queryParams.get('score');
+    setScore(retrievedScore);
+
     const fetchLearningPath = async () => {
       setIsLoading(true);
       const prompt = `
         You are an AI that generates personalized learning paths. Create a learning path for a ${level} student in ${courseName}.
-        The learning path should contain 5-7 key stages, with each stage building on the previous one. 
+        The learning path should contain 5-7 key stages, with each stage building on the previous one.
         Use a simple format like:
         1. First topic
         2. Second topic
@@ -40,7 +49,9 @@ function Path({ courseName, level }) {
 
         const data = await response.json();
         const generatedText = data.generations[0]?.text.trim();
-        const pathArray = generatedText.split('\n').filter(line => line.match(/^\d+/)).map(step => step.replace(/^\d+\.\s*/, ''));
+        const pathArray = generatedText.split('\n')
+          .filter(line => line.match(/^\d+/))
+          .map(step => step.replace(/^\d+\.\s*/, '').replace(/:$/, '')); // Remove trailing colons
 
         setLearningPath(pathArray);
 
@@ -54,7 +65,7 @@ function Path({ courseName, level }) {
     if (courseName && level) {
       fetchLearningPath();
     }
-  }, [courseName, level]);
+  }, [courseName, level, location.search]);
 
   const renderFlowChart = () => {
     return learningPath.map((step, index) => (
@@ -75,6 +86,11 @@ function Path({ courseName, level }) {
     <div className="container mt-5">
       <h2 className="text-center mb-4">Learning Path for {courseName}</h2>
       <h4 className="text-center">Level: {level.charAt(0).toUpperCase() + level.slice(1)}</h4>
+      {score && (
+        <div className="text-center alert alert-info">
+          Your Score: {score} / {learningPath.length}
+        </div>
+      )}
 
       {isLoading ? (
         <div className="d-flex justify-content-center">
