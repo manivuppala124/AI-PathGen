@@ -22,13 +22,13 @@ function Path() {
       setIsLoading(true);
       const prompt = `
         You are an AI that generates personalized learning paths. Create a learning path for a ${level} student in ${courseName}.
-        The learning path should contain 5-7 key stages, with each stage building on the previous one.
+        The learning path should contain 5-7 key stages with each stage as a concise heading.
         Use a simple format like:
         1. First topic
         2. Second topic
         3. Third topic
       `;
-
+    
       try {
         const response = await fetch(COHERE_API_URL, {
           method: 'POST',
@@ -42,26 +42,26 @@ function Path() {
             temperature: 0.7,
           }),
         });
-
+    
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+    
         const data = await response.json();
         const generatedText = data.generations[0]?.text.trim();
         const pathArray = generatedText.split('\n')
           .filter(line => line.match(/^\d+/))
-          .map(step => step.replace(/^\d+\.\s*/, '').replace(/:$/, '')); // Remove trailing colons
-
+          .map(step => step.replace(/^\d+\.\s*/, '').split(':')[0].trim()); // Get only the heading part
+    
         setLearningPath(pathArray);
-
+    
       } catch (error) {
         console.error('Error fetching learning path:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
+    
     if (courseName && level) {
       fetchLearningPath();
     }

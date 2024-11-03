@@ -24,10 +24,10 @@ function Quiz() {
         Create a quiz with 10 questions for the course: ${courseName}.
         Each question should assess key concepts from the course and increase in difficulty as the quiz progresses.
         Each question should have four options, and only one correct answer.
-
-        Return the quiz in a structured JSON format, where each question is an object with "question" and "answers" (an array of options, each with text and correct flag).
+  
+        Return the quiz strictly in JSON format, without any extra text or characters. The JSON structure should include each question as an object with "question" and "answers" (an array of options, each with "text" and "correct" flag).
       `;
-
+  
       const response = await fetch(COHERE_API_URL, {
         method: 'POST',
         headers: {
@@ -40,21 +40,21 @@ function Quiz() {
           temperature: 0.7,
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const data = await response.json();
       const generatedText = data.generations[0]?.text.trim();
-
+  
       if (!generatedText) {
         throw new Error('Empty quiz generated');
       }
-
+  
       const parsedQuiz = safeParseQuiz(generatedText);
       setQuiz(parsedQuiz);
-
+  
     } catch (error) {
       console.error('Error fetching quiz:', error);
       setQuiz([]);
@@ -63,10 +63,9 @@ function Quiz() {
       setIsLoading(false);
     }
   };
-
+  
   const safeParseQuiz = (text) => {
     try {
-      // Find the start and end of the JSON array
       const jsonStart = text.indexOf('[');
       const jsonEnd = text.lastIndexOf(']') + 1;
   
@@ -74,34 +73,32 @@ function Quiz() {
         throw new Error('No JSON structure found.');
       }
   
-      // Extract and clean up the JSON content between the brackets
       let jsonString = text.slice(jsonStart, jsonEnd)
-        .replace(/(\w+):/g, '"$1":')  // Add quotes around property names
-        .replace(/,\s*}/g, '}')       // Remove trailing commas before closing braces
-        .replace(/,\s*]/g, ']');       // Remove trailing commas before closing brackets
+        .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":') 
+        .replace(/,\s*}/g, '}')                              
+        .replace(/,\s*]/g, ']')                              
+        .replace(/\s+/g, ' ')                                
+        .replace(/(\r\n|\n|\r)/gm, '');                      
   
-      // Parse the cleaned JSON string
       const parsedQuestions = JSON.parse(jsonString);
   
       if (!Array.isArray(parsedQuestions)) {
         throw new Error('Parsed quiz is not an array.');
       }
   
-      // Map parsed questions to structured format
-      return parsedQuestions.map((question) => ({
-        question: question.question,
-        options: question.answers.map(answer => ({
-          text: answer.text,
-          correct: answer.correct
-        }))
-      }));
-  
+      // Filter questions with exactly four options and set them correctly
+      return parsedQuestions
+        .filter((question) => question.answers && question.answers.length === 4)
+        .map((question) => ({
+          question: question.question,
+          options: question.answers
+        }));
     } catch (error) {
       console.error('Error parsing quiz:', error);
-      console.error('Original text:', text); // Optional: Log full response to troubleshoot
       return [];
     }
   };
+  
   
 
   const handleAnswerChange = (selectedOption) => {
@@ -143,6 +140,7 @@ function Quiz() {
       setScore(calculatedScore);
 
       let level = '';
+      console.log(calculatedScore);
       if (calculatedScore <= 4) {
         level = 'beginner';
       } else if (calculatedScore <= 7) {
@@ -204,22 +202,23 @@ function Quiz() {
             <p className="text-center">No quiz available. Please try again.</p>
           )}
 
-          <div className="text-center">
-            {currentQuestionIndex > 0 && (
-              <button className="btn btn-secondary me-2" onClick={handleBack}>
-                Back
-              </button>
-            )}
-            {currentQuestionIndex < quiz.length - 1 ? (
-              <button className="btn btn-primary" onClick={handleNext}>
-                Next
-              </button>
-            ) : (
-              <button className="btn btn-success" onClick={handleSubmit}>
-                Submit
-              </button>
-            )}
-          </div>
+<div className="text-center">
+  {currentQuestionIndex > 0 && (
+    <button className="btn btn-secondary btn-md me-2" onClick={handleBack}>
+      Back
+    </button>
+  )}
+  {currentQuestionIndex < quiz.length - 1 ? (
+    <button className="btn btn-primary btn-md" onClick={handleNext}>
+      Next
+    </button>
+  ) : (
+    <button className="btn btn-success btn-md" onClick={handleSubmit}>
+      Submit
+    </button>
+  )}
+</div>
+
           {score !== null && (
             <div className="alert alert-info text-center mt-4">
               Your score: {score} / {quiz.length}
