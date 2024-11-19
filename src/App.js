@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
-import TestScreen from './components/TestScreen';
+// import TestScreen from './components/TestScreen';
 import Path from './components/Path';
 import Quiz from './components/Quiz';
 

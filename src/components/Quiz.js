@@ -19,15 +19,16 @@ function Quiz() {
   const fetchQuiz = async () => {
     try {
       setIsLoading(true);
+      setError(null);
+
       const prompt = `
-        You are an AI designed to generate a performance-evaluating multiple-choice quiz.
+        You are an AI designed to generate a multiple-choice quiz.
         Create a quiz with 10 questions for the course: ${courseName}.
-        Each question should assess key concepts from the course and increase in difficulty as the quiz progresses.
         Each question should have four options, and only one correct answer.
-  
-        Return the quiz strictly in JSON format, without any extra text or characters. The JSON structure should include each question as an object with "question" and "answers" (an array of options, each with "text" and "correct" flag).
+        Format the quiz strictly as a JSON array of objects with "question" and "answers" 
+        (an array of options, each with "text" and "correct" flags).
       `;
-  
+
       const response = await fetch(COHERE_API_URL, {
         method: 'POST',
         headers: {
@@ -36,120 +37,93 @@ function Quiz() {
         },
         body: JSON.stringify({
           prompt: prompt,
-          max_tokens: 2500,
-          temperature: 0.7,
+          max_tokens: 1800,
+          temperature: 0.5,
         }),
       });
-  
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       const data = await response.json();
       const generatedText = data.generations[0]?.text.trim();
-  
+
       if (!generatedText) {
-        throw new Error('Empty quiz generated');
+        throw new Error('Empty quiz generated.');
       }
-  
+
       const parsedQuiz = safeParseQuiz(generatedText);
       setQuiz(parsedQuiz);
-  
     } catch (error) {
       console.error('Error fetching quiz:', error);
-      setQuiz([]);
-      setError('Failed to fetch quiz data. Please try again later.');
+      setError('Failed to fetch quiz data. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const safeParseQuiz = (text) => {
     try {
       const jsonStart = text.indexOf('[');
       const jsonEnd = text.lastIndexOf(']') + 1;
-  
+
       if (jsonStart === -1 || jsonEnd === -1) {
-        throw new Error('No JSON structure found.');
+        throw new Error('Invalid JSON format.');
       }
-  
-      let jsonString = text.slice(jsonStart, jsonEnd)
-        .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2":') 
-        .replace(/,\s*}/g, '}')                              
-        .replace(/,\s*]/g, ']')                              
-        .replace(/\s+/g, ' ')                                
-        .replace(/(\r\n|\n|\r)/gm, '');                      
-  
+
+      const jsonString = text.slice(jsonStart, jsonEnd);
+
       const parsedQuestions = JSON.parse(jsonString);
-  
       if (!Array.isArray(parsedQuestions)) {
         throw new Error('Parsed quiz is not an array.');
       }
-  
-      // Filter questions with exactly four options and set them correctly
-      return parsedQuestions
-        .filter((question) => question.answers && question.answers.length === 4)
-        .map((question) => ({
-          question: question.question,
-          options: question.answers
-        }));
+
+      return parsedQuestions.map((q) => ({
+        question: q.question,
+        options: q.answers.map((answer) => ({
+          text: answer.text,
+          correct: answer.correct,
+        })),
+      }));
     } catch (error) {
       console.error('Error parsing quiz:', error);
+      setError('Quiz data is corrupted. Please try again.');
       return [];
     }
   };
-  
-  
 
   const handleAnswerChange = (selectedOption) => {
-    setUserAnswers((prevAnswers) => ({
-      ...prevAnswers,
+    setUserAnswers((prev) => ({
+      ...prev,
       [currentQuestionIndex]: selectedOption,
     }));
   };
 
   const handleNext = () => {
     if (userAnswers[currentQuestionIndex] == null) {
-      setError("Please select an answer before proceeding.");
+      setError('Please select an answer before proceeding.');
     } else {
       setError(null);
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
 
   const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setError(null);
-    }
+    setError(null);
+    setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0));
   };
 
   const handleSubmit = () => {
     if (userAnswers[currentQuestionIndex] == null) {
-      setError("Please select an answer before submitting.");
+      setError('Please select an answer before submitting.');
     } else {
-      let calculatedScore = 0;
-
-      quiz.forEach((q, index) => {
-        const correctAnswer = q.options.find(option => option.correct);
-        if (userAnswers[index] === correctAnswer.text) {
-          calculatedScore++;
-        }
-      });
+      const calculatedScore = quiz.reduce((acc, q, index) => {
+        const correctAnswer = q.options.find((opt) => opt.correct).text;
+        return acc + (userAnswers[index] === correctAnswer ? 1 : 0);
+      }, 0);
 
       setScore(calculatedScore);
-
-      let level = '';
-      console.log(calculatedScore);
-      if (calculatedScore <= 4) {
-        level = 'beginner';
-      } else if (calculatedScore <= 7) {
-        level = 'intermediate';
-      } else {
-        level = 'advanced';
-      }
-
-      navigate(`/path/${courseName}/${level}`);
     }
   };
 
@@ -169,67 +143,75 @@ function Quiz() {
     <div className="container mt-5">
       <h2 className="text-center mb-4">Quiz for {courseName}</h2>
       {isLoading ? (
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="text-center">
           <div className="spinner-border" role="status"></div>
         </div>
+      ) : error ? (
+        <p className="text-center text-danger">{error}</p>
+      ) : score === null && quiz.length > 0 ? (
+        <div className="quiz-container">
+          <div className="question">
+            <h5>Question {currentQuestionIndex + 1} of {quiz.length}</h5>
+            <p>{quiz[currentQuestionIndex].question}</p>
+            {quiz[currentQuestionIndex].options.map((option, index) => (
+              <div key={index} className="form-check">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  name={`q-${currentQuestionIndex}`}
+                  id={`q-${currentQuestionIndex}-opt-${index}`}
+                  value={option.text}
+                  checked={userAnswers[currentQuestionIndex] === option.text}
+                  onChange={() => handleAnswerChange(option.text)}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor={`q-${currentQuestionIndex}-opt-${index}`}
+                >
+                  {option.text}
+                </label>
+              </div>
+            ))}
+          </div>
+          <div className="navigation-buttons text-center">
+            {currentQuestionIndex > 0 && (
+              <button className="btn btn-secondary me-2" onClick={handleBack}>
+                Back
+              </button>
+            )}
+            {currentQuestionIndex < quiz.length - 1 ? (
+              <button className="btn btn-primary" onClick={handleNext}>
+                Next
+              </button>
+            ) : (
+              <button className="btn btn-success" onClick={handleSubmit}>
+                Submit
+              </button>
+            )}
+          </div>
+        </div>
+      ) : score !== null ? (
+        <div className="result">
+          <h3 className="text-center">Your Score: {score} / {quiz.length}</h3>
+          <p className="text-center">
+            Based on your score, your recommended learning path is ready.
+          </p>
+          <div className="text-center">
+            <button
+              className="btn btn-primary mt-3"
+              onClick={() =>
+                navigate(`/path/${courseName}/${score > 7 ? 'advanced' : score > 4 ? 'intermediate' : 'beginner'}`)
+              }
+            >
+              View Learning Path
+            </button>
+            <button className="btn btn-warning mt-3 ms-3" onClick={handleReattempt}>
+              Reattempt Quiz
+            </button>
+          </div>
+        </div>
       ) : (
-        <>
-          {error && <p className="error text-center text-danger">{error}</p>}
-          {quiz.length > 0 && currentQuestionIndex < quiz.length ? (
-            <div className="quiz-question mb-5 p-3 border rounded">
-              <h5 className="question-title">Question {currentQuestionIndex + 1} of {quiz.length}</h5>
-              <h6>{quiz[currentQuestionIndex].question}</h6>
-              <div className="options-list">
-                {quiz[currentQuestionIndex].options.map((option, optIndex) => (
-                  <div key={optIndex} className="form-check option-item mb-2">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name={`question-${currentQuestionIndex}`}
-                      id={`question-${currentQuestionIndex}-option-${optIndex}`}
-                      value={option.text}
-                      onChange={() => handleAnswerChange(option.text)}
-                      checked={userAnswers[currentQuestionIndex] === option.text}
-                    />
-                    <label className="form-check-label" htmlFor={`question-${currentQuestionIndex}-option-${optIndex}`}>
-                      {option.text}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="text-center">No quiz available. Please try again.</p>
-          )}
-
-<div className="text-center">
-  {currentQuestionIndex > 0 && (
-    <button className="btn btn-secondary btn-md me-2" onClick={handleBack}>
-      Back
-    </button>
-  )}
-  {currentQuestionIndex < quiz.length - 1 ? (
-    <button className="btn btn-primary btn-md" onClick={handleNext}>
-      Next
-    </button>
-  ) : (
-    <button className="btn btn-success btn-md" onClick={handleSubmit}>
-      Submit
-    </button>
-  )}
-</div>
-
-          {score !== null && (
-            <div className="alert alert-info text-center mt-4">
-              Your score: {score} / {quiz.length}
-              <div className="mt-3">
-                <button className="btn btn-warning" onClick={handleReattempt}>
-                  Reattempt Quiz
-                </button>
-              </div>
-            </div>
-          )}
-        </>
+        <p className="text-center">No quiz available. Please try again later.</p>
       )}
     </div>
   );
