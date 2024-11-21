@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AuthPage.css'; // We'll create a shared CSS file for styling
+ // We'll create a shared CSS file for styling
 
 function Login({ setIsLoggedIn, setUsername }) {
   const [username, setUser] = useState('');
@@ -26,22 +26,24 @@ function Login({ setIsLoggedIn, setUsername }) {
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <div className="input-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username"></label>
             <input 
               type="text" 
-              id="username" 
+              id="Email" 
               value={username} 
               onChange={(e) => setUser(e.target.value)} 
+              placeholder="Email"
               required 
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password"></label>
             <input 
               type="password" 
               id="password" 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
+              placeholder="Password"
               required 
             />
           </div>

@@ -1,6 +1,6 @@
 // src/components/ContactUs.js
 import React, { useState } from 'react';
-import './ContactUs.css';
+import './AuthPage.css';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -48,7 +48,7 @@ const ContactUs = () => {
       {successMessage && <p className="success-message">{successMessage}</p>}
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="name"></label>
         <input
           type="text"
           id="name"
@@ -59,7 +59,7 @@ const ContactUs = () => {
         />
         {errors.name && <p className="error">{errors.name}</p>}
 
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email"></label>
         <input
           type="email"
           id="email"
@@ -70,7 +70,7 @@ const ContactUs = () => {
         />
         {errors.email && <p className="error">{errors.email}</p>}
 
-        <label htmlFor="message">Message:</label>
+        <label htmlFor="message"></label>
         <textarea
           id="message"
           name="message"

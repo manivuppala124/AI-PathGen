@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AuthPage.css'; // We'll reuse the same CSS
+// We'll reuse the same CSS
 
 function Signup({ setIsLoggedIn, setUsername }) {
   const [username, setUser] = useState('');
@@ -28,32 +28,35 @@ function Signup({ setIsLoggedIn, setUsername }) {
         <h2>Sign Up</h2>
         <form onSubmit={handleSignup}>
           <div className="input-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username"></label>
             <input 
               type="text" 
               id="username" 
               value={username} 
-              onChange={(e) => setUser(e.target.value)} 
+              onChange={(e) => setUser(e.target.value)}
+              placeholder="Name" 
               required 
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password"></label>
             <input 
               type="password" 
               id="password" 
               value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Email" 
               required 
             />
           </div>
           <div className="input-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword"></label>
             <input 
               type="password" 
               id="confirmPassword" 
               value={confirmPassword} 
               onChange={(e) => setConfirmPassword(e.target.value)} 
+              placeholder="password"
               required 
             />
           </div>
