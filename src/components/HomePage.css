@@ -22,7 +22,7 @@
   margin-bottom: 15px; /* Space between title and courses */
 }
 body {
-  background-color: #f0f2f5; /* Light background for the whole page */
+  background-color: #052c66; /* Light background for the whole page */
 }
 
 .category-card {
@@ -42,13 +42,14 @@ body {
   max-width: 800px; /* Maximum width of the container */
   margin: 0 auto; /* Center the container */
   padding: 20px; /* Padding around the content */
-  background-color: #f8f9fa; /* Light gray background */
+  background-color: #e9e6e3; /* Light gray background */
   border-radius: 5px; /* Rounded corners */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 h1 {
-  text-align: center; /* Center the title */
+  text-align: center; 
+  -webkit-text-fill-color: rgba(23, 159, 238, 0.888);/* Center the title */
   margin-bottom: 20px; /* Space below the title */
 }
 
@@ -60,7 +61,7 @@ form {
 
 input {
   padding: 10px; /* Padding inside the input */
-  border: 1px solid #ced4da; /* Light gray border */
+  border: 1px solid #0e7be7; /* Light gray border */
   border-radius: 4px; /* Rounded corners */
   margin-right: 10px; /* Space between input and button */
   flex: 1; /* Take full width of the container */
