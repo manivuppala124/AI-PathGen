@@ -4,7 +4,7 @@
 }
 
 .category-card:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #b8d5f3; /* Darker blue on hover */
 }
 
 .category-card h3 {
@@ -22,12 +22,12 @@
   margin-bottom: 15px; /* Space between title and courses */
 }
 body {
-  background-color: #052c66; /* Light background for the whole page */
+  background-color: #b1c6e4; /* Light background for the whole page */
 }
 
 .category-card {
   transition: transform 0.3s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(141, 187, 232, 0.2);
 }
 
 .category-card:hover {

@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Poppins', 'sans-serif';
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 
 body {
@@ -12,7 +12,8 @@ body {
   background-size: cover; /* Ensures the image covers the entire page */
   background-position: center; /* Keeps the image centered */
   background-attachment: fixed; /* Ensures the background image stays fixed while scrolling */
-  height: 100vh; /* Ensures the body takes full viewport height */
+  height: 100vh;
+  margin: 0; /* Ensures the body takes full viewport height */
   font-family: 'Roboto', sans-serif;
   color: rgb(37, 166, 231); /* Set text color to contrast background */
 }
@@ -27,18 +28,18 @@ body {
 
 .auth-container {
   background-color: #ffffff; /* White box background */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border-radius: 10px;
-  width: 350px;
+  box-shadow: 0 4px 6px rgba(252, 244, 244, 0.1); /* Subtle shadow */
+  border-radius: 20px; 
+  max-width: 350px;
   text-align: center;
   padding: 30px;
-  margin: 0 20px; /* Responsive margin */
+  margin:  100px auto auto auto; /* Responsive margin */ 
   animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in effect */
 }
 
 h2 {
   color: #175fad; /* Dark blue text */
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 input[type="email"],
@@ -57,7 +58,7 @@ input[type="text"] {
 input:focus {
   border-color: #175fad;
   outline: none;
-  box-shadow: 0 0 5px rgba(23, 95, 173, 0.3);
+  box-shadow: 0 0 5px rgba(120, 185, 254, 0.3);
 }
 
 button {
@@ -77,14 +78,13 @@ button:hover {
 }
 
 .signup,
-.login {
+.login { 
   margin-top: 15px;
   font-size: 14px;
 }
-
 .signup a,
 .login a {
-  color: #175fad;
+  color: #175fad; 
   text-decoration: none;
   font-weight: bold;
 }
@@ -104,6 +104,80 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Contact Us Page Styles */
+.contact-us {
+  max-width: 500px;
+  margin: 50px auto;
+  background-color: #f0e9e9; 
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.contact-us h1 {
+  font-size: 24px;
+  color: #175fad;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.contact-us label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.contact-us input,
+.contact-us textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.contact-us input:focus,
+.contact-us textarea:focus {
+  border-color: #175fad;
+  outline: none;
+  box-shadow: 0 0 5px rgba(23, 95, 173, 0.3);
+}
+
+.contact-us button {
+  padding: 10px 20px;
+  background-color: #175fad;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+}
+
+.contact-us button:hover {
+  background-color: #144b8c;
+}
+
+.contact-us p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: green;
+  text-align: center;
+}
+
+.contact-us .error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
 /* Preserve other existing styles */
@@ -128,10 +202,8 @@ button:hover {
 
 .app h1 {
   font-size: 25px;
-  color: #001e4d;
+  color: #77fdfd;
   font-weight: 600;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #333333;
   padding-bottom: 30px;
 }
-
-/* Additional preserved styles remain unchanged */

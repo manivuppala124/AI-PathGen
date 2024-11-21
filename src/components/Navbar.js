@@ -10,7 +10,8 @@ const Navbar = () => {
         <Link to="/">PathGen</Link>
       </div>
       <div className="links">
-        <Link to="/">Home</Link>
+        <Link to="/">Home</Link> 
+        <Link to="/ContactUs">ContactUs</Link>
         <Link to="/login">Login</Link>
         <Link to="/signup">Signup</Link> 
       </div>

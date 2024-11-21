@@ -1,0 +1,82 @@
+/* ContactUs.css */
+.contact-us {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-us h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #175fad;
+  }
+  
+  .contact-us p {
+    text-align: center;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .contact-us label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .contact-us input,
+  .contact-us textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .contact-us textarea {
+    resize: vertical;
+  }
+  
+  .contact-us input:focus,
+  .contact-us textarea:focus {
+    border-color: #175fad;
+    outline: none;
+    box-shadow: 0 0 5px rgba(23, 95, 173, 0.3);
+  }
+  
+  .contact-us button {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #175fad;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .contact-us button:hover {
+    background-color: #144b8c;
+  }
+  
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+  
+  .success-message {
+    color: green;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
