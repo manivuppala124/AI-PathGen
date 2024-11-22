@@ -1,24 +1,23 @@
 /* styles.css */
 
 body {
-  background-color: #f8f9fa; /* Light gray background */
+  background-color: #f8f9fa; 
 }
 
 h2 {
-  margin-bottom: 20px; /* Space below the heading */
+  margin-bottom: 20px; 
 }
 
 h4 {
-  margin-top: 30px; /* Space above the subheadings */
+  margin-top: 30px; 
 }
 
 .container {
-  border: 1px solid #dee2e6; /* Border around the container */
-  border-radius: 5px; /* Rounded corners */
-  padding: 20px; /* Padding inside the container */
-  background-color: white; /* White background for the container */
+  border: 1px solid #dee2e6; 
+  border-radius: 5px; 
+  padding: 20px; 
+  background-color: white; 
 }
-
 .btn-primary {
-  margin-top: 10px; /* Space above the button */
+  margin-top: 10px; 
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, ListGroup } from 'react-bootstrap';
-import '../css/style.css'; // Make sure this path is correct
+import '../css/style.css'; 
 
 const CourseSearch = () => {
   const [courseName, setCourseName] = useState('');
@@ -23,7 +23,7 @@ const CourseSearch = () => {
         { name: 'Machine Learning A-Z' },
       ],
     },
-    // Add more categories and courses as needed
+    
   ];
 
   const handleSubmit = (e) => {

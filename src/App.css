@@ -8,14 +8,14 @@
 
 body {
   /* Set the background image */
-  background-image: url('path1.jpg'); /* Replace with your image URL */
-  background-size: cover; /* Ensures the image covers the entire page */
-  background-position: center; /* Keeps the image centered */
-  background-attachment: fixed; /* Ensures the background image stays fixed while scrolling */
+  background-image: url('path1.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-attachment: fixed; 
   height: 100vh;
-  margin: 0; /* Ensures the body takes full viewport height */
+  margin: 0; 
   font-family: 'Roboto', sans-serif;
-  color: rgb(37, 166, 231); /* Set text color to contrast background */
+  color: rgb(37, 166, 231); 
 }
 
 /* Login and Signup Page Styles */
@@ -25,20 +25,20 @@ body {
   justify-content: center;
   align-items: center; 
   width: 100%;
-  height: 100vh; /* Full-screen height */
+  height: 100vh; 
 }
 
 .auth-container {
-  background-color: #eae1e1; /* White box background */
-  box-shadow: 0 4px 6px rgba(139, 137, 137, 0); /* Subtle shadow */
+  background-color: #eae1e1; 
+  box-shadow: 0 4px 6px rgba(139, 137, 137, 0); 
   border-radius: 12px; 
   max-width: 350px; 
   display: block;
   text-align:center; 
   font-weight: 500;
   padding: 25px;
-  margin:  100px auto auto auto; /* Responsive margin */ 
-  animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in effect */
+  margin:  100px auto auto auto; 
+  animation: fadeIn 0.5s ease-in-out;
 }
 .auth-container h2 {
   font-size: 24px;
@@ -54,7 +54,7 @@ body {
 }
 
 h2 {
-  color: #217ddf; /* Dark blue text */
+  color: #217ddf; 
   margin-bottom: 10px;
 }
 
@@ -81,7 +81,7 @@ input:focus {
 button {
   width: 100%;
   padding: 12px;
-  background-color: #175fad; /* Dark blue button */
+  background-color: #175fad; 
   color: rgb(170, 162, 162);
   border: none;
   border-radius: 5px;
@@ -91,7 +91,7 @@ button {
 }
 
 button:hover {
-  background-color: #144b8c; /* Slightly darker on hover */
+  background-color: #144b8c;
 }
 
 .signup,
@@ -124,21 +124,21 @@ button:hover {
 }
 
 /* Contact Us Page Styles */
-/* General Styles for Contact Us Page */
+
 .contact-page {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: rgba(255, 255, 255, 0.8); /* Subtle overlay effect */
+  background: rgba(255, 255, 255, 0.8); 
   font-family: 'Poppins', sans-serif;
 }
 
 .contact-container {
-  background-color: #f5ebe9; /* Light beige background */
-  border-radius: 12px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  width: 400px; /* Fixed width */
+  background-color: #f5ebe9; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  width: 400px; 
   padding: 25px;
   text-align: center;
   animation: fadeIn 0.5s ease-in-out;
@@ -147,7 +147,7 @@ button:hover {
 /* Heading Style */
 .contact-container h2 {
   font-size: 24px;
-  color: #175fad; /* Blue color */
+  color: #175fad; 
   margin-bottom: 10px;
   font-weight: bold;
 }
@@ -155,59 +155,55 @@ button:hover {
 /* Subtitle (Description) */
 .contact-container p {
   font-size: 14px;
-  color: green; /* Green text for the subtitle */
+  color: green; 
   margin-bottom: 20px;
-  line-height: 1.4; /* Better readability */
+  line-height: 1.4;
 }
 
 /* Form Styles */
 .contact-container form {
   display: flex;
-  flex-direction: column; /* Arrange inputs vertically */
-  gap: 15px; /* Space between elements */
-}
+  flex-direction: column; 
+  gap: 15px; 
 
-/* Label Styles */
+/* Label Styles */}
 .contact-container label {
   text-align: left;
   font-size: 14px;
   font-weight: 500;
-  color: #444; /* Subtle dark grey */
+  color: #444; 
 }
 
 /* Input Fields */
 .contact-container input,
 .contact-container textarea {
-  width: 100%; /* Full-width inputs */
+  width: 100%; 
   padding: 12px;
-  border: 1px solid #ccc; /* Subtle border */
-  border-radius: 6px; /* Rounded corners */
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
   font-size: 14px;
-  color: #333; /* Text color */
-  background: rgba(255, 255, 255, 0.9); /* Light background for inputs */
-  box-sizing: border-box; /* Prevent layout issues */
+  color: #333; 
+  background: rgba(255, 255, 255, 0.9);
+  box-sizing: border-box; 
 }
-
-/* Textarea Specific */
 .contact-container textarea {
-  height: 100px; /* Fixed height for the message box */
-  resize: none; /* Prevent resizing */
+  height: 100px; 
+  resize: none; 
 }
 
-/* Focus Effect */
 .contact-container input:focus,
 .contact-container textarea:focus {
-  border-color: #175fad; /* Blue border on focus */
-  box-shadow: 0 0 5px rgba(23, 95, 173, 0.3); /* Glow effect */
-  outline: none; /* Remove default outline */
+  border-color: #1369c4;
+  box-shadow: 0 0 5px rgba(23, 95, 173, 0.3); 
+  outline: none; 
 }
 
 /* Button Styles */
 .contact-container button {
-  background-color: #175fad; /* Blue button */
-  color: white; /* White text for contrast */
+  background-color: #197eeb; 
+  color: white; 
   border: none;
-  border-radius: 6px; /* Rounded corners */
+  border-radius: 6px; 
   padding: 12px;
   cursor: pointer;
   font-size: 16px;
@@ -216,7 +212,7 @@ button:hover {
 }
 
 .contact-container button:hover {
-  background-color: #144b8c; /* Slightly darker blue on hover */
+  background-color: #144b8c; 
 }
 
 /* Responsive Design */
@@ -227,7 +223,7 @@ button:hover {
   }
 
   .contact-container h2 {
-    font-size: 20px; /* Slightly smaller heading */
+    font-size: 20px; 
   }
 
   .contact-container p {
@@ -235,7 +231,6 @@ button:hover {
   }
 }
 
-/* Fade-in Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;

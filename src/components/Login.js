@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
- // We'll create a shared CSS file for styling
+import { login } from './api/api'; 
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
-function Login({ setIsLoggedIn, setUsername }) {
-  const [username, setUser] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [error, setError] = useState(''); // Added error state
+  const [message, setMessage] = useState(''); // Added message state
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add login validation logic here, for now, we'll mock success
-    if (username === 'user' && password === 'password') {
-      setIsLoggedIn(true);
-      setUsername(username);
-      navigate('/'); // Redirect to the home page after successful login
-    } else {
-      setError('Invalid credentials. Please try again.');
+    setError(''); // Reset error state
+    setMessage(''); // Reset success message
+
+    try {
+      const token = await login(email, password); // API call to login function
+      // Store token in localStorage
+      localStorage.setItem('authToken', token);
+      
+      setMessage('Login successful!');
+      
+      // Redirect to home page (or dashboard) after successful login
+      navigate('/'); // Redirect to the home page or dashboard
+    } catch (err) {
+      setError(err || 'Login failed. Please try again.');
     }
   };
 
@@ -26,13 +34,13 @@ function Login({ setIsLoggedIn, setUsername }) {
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <div className="input-group">
-            <label htmlFor="username"></label>
+            <label htmlFor="email"></label>
             <input 
               type="text" 
               id="Email" 
-              value={username} 
-              onChange={(e) => setUser(e.target.value)} 
-              placeholder="Email"
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              placeholder="UserName/Email"
               required 
             />
           </div>
@@ -52,6 +60,8 @@ function Login({ setIsLoggedIn, setUsername }) {
         </form>
         <p>
           Don't have an account? <a href="/signup">Sign Up</a>
+          {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>} {/* Display success message */}
+        <p style={{ textAlign: 'center' }}></p>
         </p>
       </div>
     </div>

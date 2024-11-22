@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">PathGen</Link>
+      <a href="/" class="logo">PathGen</a>
       </div>
       <div className="links">
         <Link to="/">Home</Link> 
@@ -27,7 +27,7 @@ const Navbar = () => {
           <button type="submit">Login</button>
         </form>
         <div className="signup">
-          Don't have an account? <a href="#">Sign up</a>
+          Don't have an account? <a href="/signup">Sign up</a>
         </div>
       </div>
     </div>
