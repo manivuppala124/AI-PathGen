@@ -1,66 +1,137 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './HomePage.css';
-
+import backgroundVideo from '../images/background.mp4';
 const HomePage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  const categories = [
-    { name: 'Full Stack Web Development', courses: ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js'] },
-    { name: 'Data Science', courses: ['Python', 'Pandas', 'Machine Learning', 'Deep Learning'] },
-    { name: 'Programming Languages', courses: ['Java', 'Python', 'C++', 'Go'] },
-    { name: 'Databases', courses: ['MySQL', 'MongoDB', 'PostgreSQL'] },
-  ];
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (searchTerm) {
-      navigate(`/quiz/${searchTerm}`);
-    }
+  const handleSignUpClick = () => {
+    navigate('/signup');
   };
 
-  const handleCourseClick = (course) => {
-    navigate(`/quiz/${course}`);
+  const handleLoginClick = () => {
+    navigate('/login');
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Search for a Course</h1>
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="input-group">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Enter course name (e.g., JavaScript)"
-            required
-            className="form-control"
-            style={{ fontSize: '1.2em' }}
-          />
-          <button type="submit" className="btn btn-primary ml-2">Search</button>
-        </div>
-      </form>
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        position: 'relative',
+        overflow: 'hidden',
+        fontFamily: 'Arial, sans-serif',
+        textAlign: 'center',
+      }}
+    >
+      {/* Background video */}
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -1, // Ensures the video is behind other content
+        }}
+      >
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      <h2 className="text-center mb-3" style={{ backgroundColor: '#f8f9fa', padding: '10px' }}>Categories</h2>
-      {categories.map((category) => (
-        <div key={category.name} className="mb-4">
-          <h3 className="text-center">{category.name}</h3>
-          <ul className="list-group">
-            {category.courses.map((course) => (
-              <li
-                key={course}
-                className="list-group-item list-group-item-action text-center"
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleCourseClick(course)}
-              >
-                {course}
-              </li>
-            ))}
-          </ul>
+      {/* Content */}
+      <div
+        style={{
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: '#fff', // Ensures text is visible over the video
+          padding: '20px',
+        }}
+      >
+        <div
+          style={{
+            padding: '30px',
+            borderRadius: '10px',
+            background: 'rgba(0, 0, 0, 0.6)', // Semi-transparent background for better contrast
+            width: '100%',
+            maxWidth: '400px',
+            textAlign: 'center',
+          }}
+        >
+          <h1
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              marginBottom: '20px',
+            }}
+          >
+            PathGen AI
+          </h1>
+          <p
+            style={{
+              fontSize: '1rem',
+              lineHeight: '1.6',
+              marginBottom: '20px',
+              color: '#ddd',
+            }}
+          >
+            Unlock the future of learning. Your journey to success starts here!
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <button
+              onClick={handleSignUpClick}
+              style={{
+                padding: '10px 15px',
+                fontSize: '1rem',
+                background: '#007bff',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                transition: 'background-color 0.2s',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = '#0056b3';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = '#007bff';
+              }}
+            >
+              Get Started
+            </button>
+            <button
+              onClick={handleLoginClick}
+              style={{
+                padding: '10px 15px',
+                fontSize: '1rem',
+                background: '#f8f9fa',
+                color: '#007bff',
+                border: '1px solid #007bff',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                transition: 'background-color 0.2s, color 0.2s',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = '#007bff';
+                e.target.style.color = '#fff';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = '#f8f9fa';
+                e.target.style.color = '#007bff';
+              }}
+            >
+              Log In
+            </button>
+          </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 };

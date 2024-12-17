@@ -1,9 +1,52 @@
+// const express = require('express');
+// const jwt = require('jsonwebtoken');
+// const User = require('../models/user');
+
+// const router = express.Router();
+
+// router.post('/signup', async (req, res) => {
+//   const { name, email, password } = req.body;
+
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ error: 'User already exists' });
+//     }
+//     const user = new User({name, email, password });
+//     await user.save();
+//     res.status(201).json({ message: 'User registered successfully' });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to register user' });
+//   }
+// });
+
+// router.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+//     if (!user || !(await user.matchPassword(password))) {
+//       return res.status(401).json({ error: 'Invalid email or password' });
+//     }
+
+//     // Use the user's unique secret key to sign the token
+//     const token = jwt.sign({ id: user._id }, user.secretKey, { expiresIn: '1h' });
+//     res.status(201).json({message:"login success"});
+//     res.json({ token });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to login' });
+//   }
+// });
+
+// module.exports = router;
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const router = express.Router();
+const JWT_SECRET = "12345"; // Replace with your secret key
 
+// User Signup
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -12,7 +55,8 @@ router.post('/signup', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
-    const user = new User({name, email, password });
+
+    const user = new User({ name, email, password });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -20,6 +64,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+// User Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -29,10 +74,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Use the user's unique secret key to sign the token
-    const token = jwt.sign({ id: user._id }, user.secretKey, { expiresIn: '1h' });
-    res.status(201).json({message:"login success"});
-    res.json({ token });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ message: 'Login successful', token });
   } catch (error) {
     res.status(500).json({ error: 'Failed to login' });
   }

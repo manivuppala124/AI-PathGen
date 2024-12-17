@@ -1,0 +1,47 @@
+/* Container for the flowchart */
+.flowchart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Each step in the flowchart */
+  .flowchart-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  /* Styling for each box in the flowchart */
+  .flowchart-box {
+    width: 250px;  /* Set a fixed width */
+    height: 80px;  /* Set a fixed height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #11a0cb;  /* Set background color */
+    color: white;
+    border-radius: 8px;  /* Rounded corners */
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* Styling for the arrow */
+  .flowchart-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+    color: #8d48d7;
+    margin: 10px 0;  /* Space around the arrow */
+  }
+  
+  /* Only display the first arrow */
+  .flowchart-arrow:first-of-type {
+    display: block;
+  }
+  
