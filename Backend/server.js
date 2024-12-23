@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes'); // Authentication routes
 const quizRoutes = require('./routes/quizRoutes'); // Quiz routes
 const pathRoutes = require('./routes/pathRoutes'); // Import path routes
+const path=require('./routes/path');
 
 // Routes
 

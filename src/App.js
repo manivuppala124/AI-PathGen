@@ -9,6 +9,7 @@ import Path from './components/path';
 import NotFound from './components/NotFound';
 import './App.css';
 import ChatButton from './components/ChatButton';
+import ModelPath from './components/ModelPath';
 
 function App() {
     return (
