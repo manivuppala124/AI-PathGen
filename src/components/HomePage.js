@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import backgroundVideo from '../images/background.mp4';
+import backgroundVideo from '../images/bg.mp4'; 
+
 const HomePage = () => {
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ const HomePage = () => {
       }}
     >
       {/* Background video */}
-      <video
+      {<video
         autoPlay
         loop
         muted
@@ -40,7 +41,20 @@ const HomePage = () => {
       >
         <source src={backgroundVideo} type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video> }
+       {/* <img
+        src={background}
+        alt="Background"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover', // Ensures the image covers the container
+          zIndex: -1, // Ensures it sits behind other content
+        }}
+      />  */}
 
       {/* Content */}
       <div

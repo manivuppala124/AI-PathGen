@@ -39,15 +39,15 @@ const SignUpPage = () => {
   const styles = {
     page: {
       height: '100vh',
-      display: 'flex',
+      display: 'flex', 
       justifyContent: 'center',
       alignItems: 'center',
-      background: '#f9f9f9',
+      background: 'linear-gradient(to bottom, #6a11cb, #2575fc)',
       fontFamily: 'Arial, sans-serif',
       color: '#333',
     },
     container: {
-      backgroundColor: '#fff',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
       borderRadius: '10px',
       padding: '30px',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -59,7 +59,7 @@ const SignUpPage = () => {
       fontSize: '1.8rem',
       marginBottom: '20px',
       fontWeight: 'bold',
-      color: '#000',
+      color: '#ffcc00',
     },
     input: {
       marginBottom: '15px',
@@ -83,16 +83,18 @@ const SignUpPage = () => {
     button: {
       padding: '10px 15px',
       width: '100%',
-      background: '#000',
+      background: 'linear-gradient(90deg, #ff7a18, #ffcc00)',
       color: '#fff',
       border: 'none',
       borderRadius: '5px',
       cursor: 'pointer',
-      fontWeight: 'bold',
+      fontWeight: 'bold', 
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
       transition: 'background-color 0.2s',
     },
     buttonHover: {
-      backgroundColor: '#333',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 6px 8px rgba(0, 0, 0, 0.4)',
     },
     footer: {
       marginTop: '20px',

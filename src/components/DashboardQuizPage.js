@@ -189,9 +189,12 @@ const DashboardQuizPage = () => {
     setShowFeaturedCourses(false); // Hide featured courses if recent activity is clicked
   };
   
-  const handleTakeQuiz = (course) => {
-    navigate(`/quiz/${course}`);
-  };
+  // const handleTakeQuiz = (course) => {
+  //   navigate(`/quiz/${course}`);
+  // };
+ const handleTakeQuiz = () => {
+  navigate('/quiz-search');
+};
 
   // Toggle visibility of Featured Courses
   const handleFeaturedCoursesClick = () => {

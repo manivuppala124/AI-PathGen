@@ -55,6 +55,7 @@ router.get('/:courseName', async (req, res) => {
     console.error('Error generating quiz:', error);
     res.status(500).json({ error: 'Failed to generate quiz.' });
   }
-});
+}); 
+
 
 module.exports = router;
