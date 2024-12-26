@@ -360,19 +360,17 @@ const DashboardQuizPage = () => {
 
       {/* Search Form */}
 
-<form onSubmit={handleSearch} className="mb-5 d-flex">
+      <form onSubmit={handleSearch} className="mb-5 d-flex flex-wrap">
   <input
     type="text"
-    className="form-control"
+    className="form-control mb-2 flex-grow-1"
     placeholder="Search for a course..."
     value={searchQuery}
     onChange={(e) => setSearchQuery(e.target.value)}
-    list="course-suggestions" // Connect the input to the datalist
+    list="course-suggestions"
     style={{
-      width: '400px',
       padding: '15px',
       borderRadius: '10px',
-      marginRight: '10px',
       fontSize: '1.1rem',
     }}
   />
@@ -386,7 +384,7 @@ const DashboardQuizPage = () => {
 
   <button
     type="submit"
-    className="btn btn-primary"
+    className="btn btn-primary mb-2"
     style={{
       padding: '15px 30px',
       fontSize: '1.1rem',
@@ -401,7 +399,7 @@ const DashboardQuizPage = () => {
       {/* Category Selection */}
       <div className="row mb-5">
         {categories.map((category) => (
-          <div className="col-md-4 mb-4" key={category.name}>
+          <div className="col-md-4 col-sm-6 col-12 mb-4 " key={category.name}>
             <div
               className="card"
               style={{
@@ -453,4 +451,5 @@ const DashboardQuizPage = () => {
   );
 };
 
-export default DashboardQuizPage;
+export default DashboardQuizPage; 
+
