@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes'); // Authentication routes
 const quizRoutes = require('./routes/quizRoutes'); // Quiz routes
-const pathRoutes = require('./routes/pathRoutes'); // Import path routes
-const path=require('./routes/path');
-
+const pathRoutes = require('./routes/pathRoutes'); 
+const savePathRoutes = require('./routes/savePathRoutes')// Import path routes
+const fetchPathRoutes = require('./routes/fetchPathRoutes')// Fetch path routes
 // Routes
 
 
@@ -28,8 +28,9 @@ mongoose
 // Routes
 app.use('/api/auth', authRoutes); // Authentication routes
 app.use('/api/quiz', quizRoutes); // Quiz routes
-app.use('/api/path', pathRoutes); // Use path routes for learning path generation
-
+app.use('/api/path', pathRoutes);
+app.use('/api/path',savePathRoutes) // Use path routes for learning path generation
+app.use('/api/path',fetchPathRoutes);
 // Default route
 app.get('/', (req, res) => {
   res.send('Welcome to the Learning Path Generator API!');

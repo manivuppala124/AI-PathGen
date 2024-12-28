@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Path.css';
@@ -10,61 +10,84 @@ function Path() {
   const [learningPath, setLearningPath] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [score, setScore] = useState(null);
+  const [expandedStepIndex, setExpandedStepIndex] = useState(null); // State to manage expanded description
+
+  const fetchLearningPath = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const cachedPath = localStorage.getItem(`learningPath_${courseName}_${level}`);
+      if (cachedPath) {
+        const parsedPath = JSON.parse(cachedPath);
+        setLearningPath(parsedPath);
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await fetch(`http://localhost:4000/api/path/generate?courseName=${courseName}&level=${level}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch learning path');
+      }
+      const data = await response.json();
+      setLearningPath(data.learningPath || []);
+      localStorage.setItem(`learningPath_${courseName}_${level}`, JSON.stringify(data.learningPath));
+    } catch (error) {
+      console.error('Error fetching learning path:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [courseName, level]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const retrievedScore = queryParams.get('score');
     setScore(retrievedScore);
 
-    const fetchLearningPath = async () => {
-      setIsLoading(true);
+    fetchLearningPath();
+  }, [courseName, level, location.search, fetchLearningPath]);
 
-      try {
-        const cachedPath = localStorage.getItem(`learningPath_${courseName}_${level}`);
-        if (cachedPath) {
-          const parsedPath = JSON.parse(cachedPath);
-          setLearningPath(parsedPath);
-          setIsLoading(false);
-          return;
-        }
-
-        const response = await fetch(`http://localhost:4000/api/path/generate?courseName=${courseName}&level=${level}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch learning path');
-        }
-        const data = await response.json();
-        setLearningPath(data.learningPath || []);
-        localStorage.setItem(`learningPath_${courseName}_${level}`, JSON.stringify(data.learningPath));
-      } catch (error) {
-        console.error('Error fetching learning path:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (courseName && level) {
-      fetchLearningPath();
+  const saveLearningPath = () => {
+    if (learningPath.length > 0) {
+      alert('Learning path saved successfully!');
+    } else {
+      alert('No learning path to save.');
     }
-  }, [courseName, level, location.search]);
+  };
+
+  const regenerateLearningPath = async () => {
+    localStorage.removeItem(`learningPath_${courseName}_${level}`);
+    await fetchLearningPath();
+  };
+
+  const handleToggleDescription = (index) => {
+    setExpandedStepIndex((prevIndex) => (prevIndex === index ? null : index)); // Toggle the description visibility
+  };
 
   const renderFlowChart = () => {
     return learningPath.map((step, index) => (
-      <div key={index} className="flowchart-step mb-3 text-center">
-        {/* Render box */}
-        <div className="flowchart-box p-3 bg-primary text-white rounded">
-          {step}
+      <div key={index} className="flowchart-step mb-4 text-center">
+        <div className="flowchart-box">
+          <h5
+            className="flowchart-heading"
+            onClick={() => handleToggleDescription(index)} // Add click handler
+            style={{
+              cursor: 'pointer',
+              color: '#fff', // White font color
+              backgroundColor: '#6a11cb', // Optional: Background color for better visibility
+              padding: '10px',
+              borderRadius: '5px',
+            }}
+          >
+            {step.heading}
+          </h5>
+          {expandedStepIndex === index && (
+            <p className="flowchart-description">{step.description}</p> // Show description if expanded
+          )}
         </div>
-  
-        {/* Only render arrow if it's not the last step */}
-        {index < learningPath.length - 1 && (
-          <div className="flowchart-arrow my-2">
-          
-          </div>
-        )}
+        {index < learningPath.length - 1 && <div className="flowchart-arrow">↓</div>}
       </div>
     ));
   };
-  
   
 
   return (
@@ -112,57 +135,18 @@ function Path() {
 
         {learningPath.length > 0 && (
           <div className="text-center mt-4">
+            <button className="btn btn-success me-2" onClick={saveLearningPath}>
+              Save Learning Path
+            </button>
+            <button className="btn btn-warning me-2" onClick={regenerateLearningPath}>
+              Regenerate Learning Path
+            </button>
             <button className="btn btn-secondary" onClick={() => navigate(`/dashboard`)}>
               Start Learning
             </button>
           </div>
         )}
       </div>
-
-      {/* Inline styles */}
-      <style>{`
-        .flowchart-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .flowchart-step {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: 10px;
-        }
-
-        .flowchart-box {
-          width: 250px; /* Set a fixed width */
-          height: 80px; /* Set a fixed height */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #6a11cb;
-          color: white;
-          border-radius: 8px;
-          font-size: 16px;
-          font-weight: bold;
-          text-align: center;
-        }
-
-        .flowchart-arrow {
-          width: 30px; /* Ensure arrow size consistency */
-          height: 30px; /* Ensure arrow size consistency */
-          font-size: 24px;
-          line-height: 30px;
-          text-align: center;
-          color: #6a11cb;
-        }
-
-        .flowchart-arrow::before {
-          content: "↓"; /* Arrow character */
-          font-size: 24px;
-        }
-      `}</style>
     </div>
   );
 }

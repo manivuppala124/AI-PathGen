@@ -1,47 +1,211 @@
-/* Container for the flowchart */
+/* General container styling */
 .flowchart-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Each step in the flowchart */
-  .flowchart-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
-  
-  /* Styling for each box in the flowchart */
-  .flowchart-box {
-    width: 250px;  /* Set a fixed width */
-    height: 80px;  /* Set a fixed height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #11a0cb;  /* Set background color */
-    color: white;
-    border-radius: 8px;  /* Rounded corners */
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  /* Styling for the arrow */
-  .flowchart-arrow {
-    width: 30px;
-    height: 30px;
-    font-size: 24px;
-    line-height: 30px;
-    text-align: center;
-    color: #8d48d7;
-    margin: 10px 0;  /* Space around the arrow */
-  }
-  
-  /* Only display the first arrow */
-  .flowchart-arrow:first-of-type {
-    display: block;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+/* Title styling */
+.flowchart-title {
+  font-size: 1.8rem; /* Slightly smaller font size for title */
+  color: purple;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Box styling */
+.flowchart-box {
+  background-color: #7a3ffb; /* Purple background color */
+  color: white;
+  border-radius: 10px;
+  padding: 15px; /* Slightly reduced padding */
+  margin: 10px auto;
+  width: 250px; /* Fixed width for uniformity */
+  height: 80px; /* Fixed height for consistency */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word; /* Ensures long words break to fit inside */
+  overflow: hidden; /* Hides any overflowing text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem; /* Consistent font size */
+  font-weight: bold;
+}
+
+/* Heading inside the box */
+.flowchart-heading {
+  font-size: 1.2rem; /* Reduced font size for headings */
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* Description inside the box */
+.flowchart-description {
+  font-size: 0.9rem; /* Smaller font size for descriptions */
+  font-weight: normal;
+  line-height: 1.4; /* Slightly tighter line spacing */
+  margin: 0;
+}
+
+/* Arrow styling */
+.flowchart-arrow {
+  width: 30px; /* Fixed arrow size */
+  height: 30px;
+  font-size: 1.5rem; /* Slightly reduced size for arrows */
+  line-height: 30px; /* Center align text within arrow */
+  text-align: center;
+  color: #8d48d7; /* Purple arrow color */
+  margin: 10px 0; /* Space around the arrow */
+}
+
+/* Spacing between elements */
+.mb-4 {
+  margin-bottom: 20px;
+}
+
+/* Flexbox container for steps */
+.flowchart-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* Only display the first arrow */
+.flowchart-arrow:first-of-type {
+  display: block;
+}
+/* General container styling */
+.flowchart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+/* Title styling */
+.flowchart-title {
+  font-size: 1.8rem;
+  color: purple;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Box styling */
+.flowchart-box {
+  background-color: #7a3ffb; /* Purple background color */
+  color: white;
+  border-radius: 10px;
+  padding: 15px; /* Adjusted padding */
+  margin: 10px auto;
+  width: 250px; /* Fixed width */
+  height: 120px; /* Increased height to fit the description */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word; /* Ensures long words break to fit inside */
+  overflow: hidden; /* Hides any overflowing text */
+  display: flex;
+  flex-direction: column; /* Allows both heading and description */
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem; /* Font size for descriptions */
+}
+
+/* Heading inside the box */
+.flowchart-heading {
+  font-size: 1.2rem; /* Slightly smaller heading font size */
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* Description inside the box */
+.flowchart-description {
+  font-size: 0.9rem; /* Reduced font size for descriptions */
+  font-weight: normal;
+  line-height: 1.4; /* Tighter line spacing */
+  margin: 0;
+  text-align: center;
+}
+
+/* Arrow styling */
+.flowchart-arrow {
+  width: 30px; /* Fixed size for arrows */
+  height: 30px;
+  font-size: 1.5rem; /* Arrow size */
+  line-height: 30px;
+  text-align: center;
+  color: #8d48d7; /* Purple arrow color */
+  margin: 10px 0; /* Space around arrows */
+}
+
+/* Flexbox container for steps */
+.flowchart-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+/* Box styling */
+.flowchart-box {
+  background-color: #7a3ffb; /* Purple background color */
+  color: white;
+  border-radius: 10px;
+  padding: 25px; /* Increased padding for more space */
+  margin: 15px auto; /* Adjusted margin for spacing */
+  width: 350px; /* Increased width */
+  height: auto; /* Let the height grow with content */
+  text-align: left; /* Align text to the left */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word; /* Ensures long words break to fit inside */
+  display: flex;
+  flex-direction: column; /* Stacks heading and description vertically */
+  justify-content: flex-start; /* Align items at the top */
+  font-size: 1rem; /* Font size for descriptions */
+  line-height: 1.5; /* Improved line spacing */
+}
+
+/* Heading inside the box */
+.flowchart-heading {
+  font-size: 1.4rem; /* Slightly larger font size for headings */
+  font-weight: bold;
+  margin-bottom: 12px; /* Adds spacing between heading and description */
+  text-transform: uppercase; /* Make headings uppercase for emphasis */
+}
+
+/* Description inside the box */
+.flowchart-description {
+  font-size: 1rem; /* Adjusted font size for better readability */
+  font-weight: normal;
+  line-height: 1.5; /* Increased line height for better readability */
+  color: #e0e0e0; /* Slightly lighter color for contrast */
+  margin: 0;
+  text-align: left; /* Align text to the left */
+}
+
+/* Arrow styling */
+.flowchart-arrow {
+  width: 30px; /* Fixed size for arrows */
+  height: 30px;
+  font-size: 1.5rem; /* Arrow size */
+  line-height: 30px;
+  text-align: center;
+  color: #8d48d7; /* Purple arrow color */
+  margin: 15px 0; /* Increased margin around arrows */
+}
+
+/* Flexbox container for steps */
+.flowchart-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px; /* Added margin for spacing */
+}

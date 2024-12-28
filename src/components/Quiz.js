@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,7 +12,7 @@ function Quiz() {
   const [error, setError] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  const fetchQuiz = async () => {
+  const fetchQuiz = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -52,7 +52,13 @@ function Quiz() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [courseName]);
+
+  useEffect(() => {
+    if (courseName) {
+      fetchQuiz();
+    }
+  }, [courseName, fetchQuiz]);
 
   const handleAnswerChange = (selectedOption) => {
     setUserAnswers((prev) => ({
@@ -93,12 +99,6 @@ function Quiz() {
     setScore(null);
     setCurrentQuestionIndex(0);
   };
-
-  useEffect(() => {
-    if (courseName) {
-      fetchQuiz();
-    }
-  }, [courseName]);
 
   return (
     <div

@@ -5,7 +5,7 @@ import SignUpPage from './components/SignUpPage';
 import LoginPage from './components/LoginPage'; 
 import DashboardQuizPage from './components/DashboardQuizPage'; 
 import Quiz from './components/Quiz'; 
-import Path from './components/Path'; 
+import Path from './components/path'; 
 import QuizSearchPage from './components/QuizSearchPage'; 
 import ChatButton from './components/ChatButton'; 
 // import QuizWithDashboard from './components/QuizWithDashboard'

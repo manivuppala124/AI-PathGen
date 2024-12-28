@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch');  // You will need to install node-fetch
+const fetch = require('node-fetch'); // You will need to install node-fetch
 
 const COHERE_API_KEY = 'AexcEiRB0FyK6MEZiiZOqlu77T4S3L4FOqAkMGAH';
 const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
@@ -15,11 +15,11 @@ router.get('/generate', async (req, res) => {
 
   const prompt = `
     You are an AI that generates personalized learning paths. Create a learning path for a ${level} student in ${courseName}.
-    The learning path should contain 5-7 key stages with each stage as a concise heading.
+    The learning path should contain 5-7 key stages, with each stage as a heading followed by a brief description (one line) about what it covers.
     Use a simple format like:
-    1. First topic
-    2. Second topic
-    3. Third topic
+    1. First topic: Description of the first topic
+    2. Second topic: Description of the second topic
+    3. Third topic: Description of the third topic
   `;
 
   try {
@@ -47,7 +47,11 @@ router.get('/generate', async (req, res) => {
       const pathArray = generatedText
         .split('\n')
         .filter((line) => line.match(/^\d+/))
-        .map((step) => step.replace(/^\d+\.\s*/, '').split(':')[0].trim());
+        .map((step) => {
+          const [heading, description] = step.replace(/^\d+\.\s*/, '').split(':').map((part) => part.trim());
+          return { heading, description };
+        });
+
       return res.json({ learningPath: pathArray });
     } else {
       return res.status(500).json({ error: 'Failed to generate learning path' });
