@@ -209,3 +209,18 @@
   justify-content: center;
   margin-bottom: 15px; /* Added margin for spacing */
 }
+.btn {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  padding: 10px 15px;
+}
+
+.text-center .btn {
+  margin: 5px; /* Optional spacing between buttons */
+}
+
+.flowchart-arrow {
+  font-size: 20px;
+  color: #6a11cb;
+}

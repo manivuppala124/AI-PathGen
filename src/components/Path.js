@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Path.css';
+import SaveButton from './saveButton';
 
 function Path() {
   const { courseName, level } = useParams();
@@ -76,6 +77,7 @@ function Path() {
               backgroundColor: '#6a11cb', // Optional: Background color for better visibility
               padding: '10px',
               borderRadius: '5px',
+              fontSize: '1rem',
             }}
           >
             {step.heading}
@@ -84,11 +86,10 @@ function Path() {
             <p className="flowchart-description">{step.description}</p> // Show description if expanded
           )}
         </div>
-        {index < learningPath.length - 1 && <div className="flowchart-arrow">↓</div>}
+        {index < learningPath.length - 1 && <div className="flowchart-arrow" style={{ padding: '10px' }}>↓</div>}
       </div>
     ));
   };
-  
 
   return (
     <div
@@ -134,10 +135,13 @@ function Path() {
         )}
 
         {learningPath.length > 0 && (
-          <div className="text-center mt-4">
-            <button className="btn btn-success me-2" onClick={saveLearningPath}>
-              Save Learning Path
-            </button>
+          <div className="text-center mt-4 d-flex justify-content-center align-items-center">
+            <SaveButton
+              className="btn btn-success me-2" // Updated consistent class
+              courseName={courseName}
+              level={level}
+              learningPath={learningPath}
+            />
             <button className="btn btn-warning me-2" onClick={regenerateLearningPath}>
               Regenerate Learning Path
             </button>

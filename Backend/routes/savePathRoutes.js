@@ -23,7 +23,7 @@ const authenticateUser = (req, res, next) => {
 // Save learning path for the logged-in user
 router.post('/save', authenticateUser, async (req, res) => {
   try {
-    const { courseName, level, path ,quizResult} = req.body;
+    const { courseName, level, path } = req.body;
 
     if (!courseName || !level || !path ) {
       return res.status(400).json({ error: 'All fields are required.' });
@@ -33,8 +33,7 @@ router.post('/save', authenticateUser, async (req, res) => {
       userId: req.userId, // The authenticated user's ID
       courseName,
       level,
-      path,
-      quizResult, // The quiz result obtained by the userResult, // The quiz result obtained by the userResult, // The quiz result obtained by the user
+      path, // The quiz result obtained by the userResult, // The quiz result obtained by the userResult, // The quiz result obtained by the user
     });
 
     await newLearningPath.save();

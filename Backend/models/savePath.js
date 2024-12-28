@@ -15,7 +15,12 @@ const LearningPathSchema = new mongoose.Schema({
     required: true, // e.g., "beginner", "intermediate", "advanced"
   },
   path: {
-    type: [String], // Array of learning steps or resources
+    type: [
+      {
+        heading : { type: String, required: true }, // The learning step or resource
+        description: { type: String, required: true }, // Description of the step/resource
+      },
+    ],
     required: true,
   },
   // quizResult: {
