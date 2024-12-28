@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SaveButton = ({ courseName, level, learningPath, quizResult }) => {
+const SaveButton = ({ courseName,level, learningPath }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -17,24 +17,27 @@ const SaveButton = ({ courseName, level, learningPath, quizResult }) => {
     setSuccessMessage(null); // Clear previous success message
 
     const token = localStorage.getItem('authToken'); // Assuming the token is stored in localStorage after login
-
+console.log(learningPath);
+console.log(token);
+console.log(level);
+console.log(courseName);
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/path/save', // API endpoint to save the learning path
+        'http://localhost:4000/api/path/save', // Endpoint to save data
         {
-          token: token,
-          courseName: courseName,
-          level: level,
+          token:token,
+          courseName: courseName, // Add actual course name dynamically if needed
+          level: level, // Add actual level dynamically if needed
           path: learningPath,
-          quizResult: quizResult, // Include quiz result if available
+          // quizResult: quizResult, // Pass the quiz result (score)
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Send the token in the Authorization header
+            Authorization: `Bearer ${token}`,  // Sending the JWT token in the Authorization header
           },
         }
       );
-
+      //console.log(token);
       if (response) {
         setSuccessMessage('Learning path saved successfully!');
       }
@@ -44,6 +47,7 @@ const SaveButton = ({ courseName, level, learningPath, quizResult }) => {
       setIsSaving(false);
     }
   };
+
 
   return (
     <div className="text-center mt-4">

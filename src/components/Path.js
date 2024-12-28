@@ -47,13 +47,6 @@ function Path() {
     fetchLearningPath();
   }, [courseName, level, location.search, fetchLearningPath]);
 
-  const saveLearningPath = () => {
-    if (learningPath.length > 0) {
-      alert('Learning path saved successfully!');
-    } else {
-      alert('No learning path to save.');
-    }
-  };
 
   const regenerateLearningPath = async () => {
     localStorage.removeItem(`learningPath_${courseName}_${level}`);
@@ -63,7 +56,7 @@ function Path() {
   const handleToggleDescription = (index) => {
     setExpandedStepIndex((prevIndex) => (prevIndex === index ? null : index)); // Toggle the description visibility
   };
-
+console.log(learningPath);
   const renderFlowChart = () => {
     return learningPath.map((step, index) => (
       <div key={index} className="flowchart-step mb-4 text-center">
@@ -86,10 +79,11 @@ function Path() {
             <p className="flowchart-description">{step.description}</p> // Show description if expanded
           )}
         </div>
-        {index < learningPath.length - 1 && <div className="flowchart-arrow" style={{ padding: '10px' }}>↓</div>}
+        {index < learningPath.length - 1 && <div className="flowchart-arrow" style={{padding : '10px'}}>↓</div>}
       </div>
     ));
   };
+  
 
   return (
     <div
@@ -134,22 +128,23 @@ function Path() {
           </div>
         )}
 
-        {learningPath.length > 0 && (
-          <div className="text-center mt-4 d-flex justify-content-center align-items-center">
-            <SaveButton
-              className="btn btn-success me-2" // Updated consistent class
-              courseName={courseName}
-              level={level}
-              learningPath={learningPath}
-            />
-            <button className="btn btn-warning me-2" onClick={regenerateLearningPath}>
-              Regenerate Learning Path
-            </button>
-            <button className="btn btn-secondary" onClick={() => navigate(`/dashboard`)}>
-              Start Learning
-            </button>
-          </div>
-        )}
+{learningPath.length > 0 && (
+  <div className="text-center mt-4 d-flex justify-content-center align-items-center">
+    <SaveButton
+      className="btn btn-primary me-2"
+      courseName={courseName}
+      level={level}
+      learningPath={learningPath}
+    />
+    <button className="btn btn-warning me-2" onClick={regenerateLearningPath}>
+      Regenerate Learning Path
+    </button>
+    <button className="btn btn-secondary" onClick={() => navigate(`/dashboard`)}>
+      Start Learning
+    </button>
+  </div>
+)}
+
       </div>
     </div>
   );
