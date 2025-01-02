@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch'); // You will need to install node-fetch
 
-const COHERE_API_KEY = 'AexcEiRB0FyK6MEZiiZOqlu77T4S3L4FOqAkMGAH';
+const COHERE_API_KEY = 'OrdqKfDbrnezh41I0sptl7NT0OBaVjszTdqxIcme';
 const COHERE_API_URL = 'https://api.cohere.ai/v1/generate';
 
 // Route to get learning path
